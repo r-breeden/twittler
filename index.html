@@ -6,7 +6,7 @@
     <link rel="stylesheet" href="stylesheet.css">
   </head>
   <body>
-    <span class="title" href="">
+    <span>
       <header>Twittler</header>
     </span>
     <div class="refresh">
@@ -22,12 +22,13 @@
     //streams.users.shawndrost has all of shawndrost's tweets
 
       $(document).ready(function(){
+        var userStream = false;
+
         var $body = $('body');
-        //$body.html('');
 
         //twittler home button
-        $('.title').on('click', 'span', function () {
-           window.location.href='index';
+        $('header').on('click', function () {
+           window.location.href='index.html';
         });
 
         //refresh button
@@ -35,24 +36,65 @@
           window.location.reload();
         });
 
-        var index = streams.home.length - 1;
-        while(index >= 0){
-          var tweet = streams.home[index];
-          var $tweet = $('<div></div>');
+        //user button
+        $('.main').on('click', '.user', function () {
+           
+           userStream = true; 
+           //get user name
+           var selectedUser = $(this).html();
+           //clear previous stream
+           $(".main").empty();
+           //show filtered stream by user name
+           var index = streams.home.length - 1;
+           while(index >= 0){
+             var tweet = streams.home[index];
+             if('@' + tweet.user === selectedUser){
+               
+               var $tweet = $('<span></span>');
           
-          var timeStamp = tweet.created_at;
-          var $timeStamp = $('<div class="time"></div>');
-          
-          var user = tweet.user;
-          var $user = $('<div href=  class="user"></div>');
+               var user = tweet.user;
+               var $user = $('<span class="user"></span>');
 
-          $tweet.text('@' + tweet.user + ': ' + tweet.message);
-          $tweet.appendTo($('.main'));
+               var timeStamp = tweet.created_at; 
+               var $timeStamp = $('<div class="time"></div>');
           
-          $timeStamp.text(timeStamp);
-          $timeStamp.appendTo($('.main'));
+               $user.text('@' + user);
+               $user.appendTo($('.main'));
 
-          index -= 1;
+               $tweet.text(' ' + tweet.message);
+               $tweet.appendTo($('.main'));
+          
+               $timeStamp.text(timeStamp);
+               $timeStamp.appendTo($('.main'));
+             }//end if 
+             index -= 1;
+           }//end while
+
+        });
+
+        
+          var index = streams.home.length - 1;
+          while(index >= 0){
+            var tweet = streams.home[index];
+            var $tweet = $('<span></span>');
+          
+            var user = tweet.user;
+            var $user = $('<span class="user"></span>');
+
+            var timeStamp = tweet.created_at; 
+            var $timeStamp = $('<div class="time"></div>');
+          
+            $user.text('@' + user);
+            $user.appendTo($('.main'));
+
+            $tweet.text(' ' + tweet.message);
+            $tweet.appendTo($('.main'));
+          
+            $timeStamp.text(timeStamp);
+            $timeStamp.appendTo($('.main'));
+
+            index -= 1;
+          
         }
 
       });
